@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-blue-600 to-purple-700 text-white">
+    <main className="min-h-screen bg-gradient-to-b from-pink-400 to-pink-700 text-white">
       <header className="p-6 flex justify-between items-center max-w-6xl mx-auto">
         <h1 className="text-2xl font-bold tracking-tight">Frankenstein App</h1>
         <nav className="space-x-6 text-sm font-medium">
@@ -17,7 +17,7 @@ export default function Home() {
         <p className="text-xl mb-8 max-w-2xl opacity-90">
           This app is being built live by AI, one prompt at a time.
         </p>
-        <button className="bg-white text-purple-700 px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors">
+        <button className="bg-white text-pink-600 px-8 py-3 rounded-full text-lg font-semibold hover:bg-pink-50 transition-colors shadow-lg shadow-pink-900/30">
           Get Started
         </button>
       </section>
