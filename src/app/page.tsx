@@ -12,7 +12,7 @@ export default function Home() {
 
       <section className="flex flex-col items-center justify-center py-32 px-4 text-center">
         <h2 className="text-6xl font-extrabold mb-6 leading-tight">
-          Welcome to the Future
+          Hello World
         </h2>
         <p className="text-xl mb-8 max-w-2xl opacity-90">
           This app is being built live by AI, one prompt at a time.
