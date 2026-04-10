@@ -788,6 +788,368 @@ function QuoteBreak({ quote, author }: { quote: string; author: string }) {
 }
 
 /* ════════════════════════════════════════════
+   FLAPPY UNICORN
+   ════════════════════════════════════════════ */
+
+const GAME_W = 400;
+const GAME_H = 500;
+const PIPE_W = 52;
+const PIPE_GAP = 130;
+const GRAVITY = 0.45;
+const FLAP_VEL = -7;
+const PIPE_SPEED = 2.5;
+const UNICORN_SIZE = 24;
+
+type Pipe = { x: number; topH: number; scored: boolean };
+type GameState = "idle" | "playing" | "dead";
+
+function getHighScores(): { name: string; score: number }[] {
+  try {
+    const raw = localStorage.getItem("flappy-unicorn-scores");
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+function saveHighScore(score: number) {
+  const scores = getHighScores();
+  scores.push({ name: "Player", score });
+  scores.sort((a, b) => b.score - a.score);
+  const top5 = scores.slice(0, 5);
+  localStorage.setItem("flappy-unicorn-scores", JSON.stringify(top5));
+  return top5;
+}
+
+function FlappyUnicorn() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const stateRef = useRef<{
+    gameState: GameState;
+    y: number;
+    vel: number;
+    pipes: Pipe[];
+    score: number;
+    frame: number;
+    bestScores: { name: string; score: number }[];
+    flashTimer: number;
+  }>({
+    gameState: "idle",
+    y: GAME_H / 2,
+    vel: 0,
+    pipes: [],
+    score: 0,
+    frame: 0,
+    bestScores: [],
+    flashTimer: 0,
+  });
+  const rafRef = useRef<number>(0);
+  const [, forceRender] = useState(0);
+
+  useEffect(() => {
+    stateRef.current.bestScores = getHighScores();
+    forceRender((n) => n + 1);
+  }, []);
+
+  const resetGame = () => {
+    const s = stateRef.current;
+    s.y = GAME_H / 2;
+    s.vel = 0;
+    s.pipes = [];
+    s.score = 0;
+    s.frame = 0;
+    s.flashTimer = 0;
+    s.gameState = "playing";
+  };
+
+  const flap = () => {
+    const s = stateRef.current;
+    if (s.gameState === "idle" || s.gameState === "dead") {
+      resetGame();
+      startLoop();
+      return;
+    }
+    if (s.gameState === "playing") {
+      s.vel = FLAP_VEL;
+    }
+  };
+
+  const startLoop = () => {
+    cancelAnimationFrame(rafRef.current);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d")!;
+
+    const loop = () => {
+      const s = stateRef.current;
+      if (s.gameState !== "playing" && s.gameState !== "dead") return;
+
+      if (s.gameState === "playing") {
+        s.frame++;
+        s.vel += GRAVITY;
+        s.y += s.vel;
+
+        // spawn pipes
+        if (s.frame % 90 === 0) {
+          const topH = 60 + Math.random() * (GAME_H - PIPE_GAP - 120);
+          s.pipes.push({ x: GAME_W, topH, scored: false });
+        }
+
+        // move pipes
+        s.pipes.forEach((p) => { p.x -= PIPE_SPEED; });
+        s.pipes = s.pipes.filter((p) => p.x > -PIPE_W);
+
+        // score
+        s.pipes.forEach((p) => {
+          if (!p.scored && p.x + PIPE_W < GAME_W * 0.25) {
+            p.scored = true;
+            s.score++;
+            s.flashTimer = 8;
+          }
+        });
+
+        // collision
+        const ux = GAME_W * 0.25;
+        const uy = s.y;
+        const ur = UNICORN_SIZE / 2;
+
+        if (uy - ur < 0 || uy + ur > GAME_H) {
+          s.gameState = "dead";
+          s.bestScores = saveHighScore(s.score);
+          forceRender((n) => n + 1);
+        }
+
+        for (const p of s.pipes) {
+          if (ux + ur > p.x && ux - ur < p.x + PIPE_W) {
+            if (uy - ur < p.topH || uy + ur > p.topH + PIPE_GAP) {
+              s.gameState = "dead";
+              s.bestScores = saveHighScore(s.score);
+              forceRender((n) => n + 1);
+              break;
+            }
+          }
+        }
+
+        if (s.flashTimer > 0) s.flashTimer--;
+      }
+
+      // === DRAW ===
+      // bg sky gradient
+      const sky = ctx.createLinearGradient(0, 0, 0, GAME_H);
+      sky.addColorStop(0, "#1a1a3e");
+      sky.addColorStop(1, "#2a4a3a");
+      ctx.fillStyle = sky;
+      ctx.fillRect(0, 0, GAME_W, GAME_H);
+
+      // stars
+      for (let i = 0; i < 12; i++) {
+        ctx.save();
+        ctx.globalAlpha = 0.3 + Math.sin(s.frame * 0.05 + i * 2) * 0.15;
+        ctx.fillStyle = "#fff";
+        ctx.beginPath();
+        ctx.arc(((i * 37 + 13) % GAME_W), ((i * 53 + 7) % (GAME_H * 0.5)), 1, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // ground
+      ctx.fillStyle = "#2a4a2a";
+      ctx.fillRect(0, GAME_H - 2, GAME_W, 2);
+
+      // pipes
+      s.pipes.forEach((p) => {
+        // top pipe
+        const topGrad = ctx.createLinearGradient(p.x, 0, p.x + PIPE_W, 0);
+        topGrad.addColorStop(0, "#2d8a4e");
+        topGrad.addColorStop(0.5, "#4ade80");
+        topGrad.addColorStop(1, "#2d8a4e");
+        ctx.fillStyle = topGrad;
+        ctx.fillRect(p.x, 0, PIPE_W, p.topH);
+        // top pipe cap
+        ctx.fillStyle = "#22763e";
+        ctx.fillRect(p.x - 3, p.topH - 18, PIPE_W + 6, 18);
+        ctx.strokeStyle = "#1a5a30";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(p.x - 3, p.topH - 18, PIPE_W + 6, 18);
+
+        // bottom pipe
+        const botY = p.topH + PIPE_GAP;
+        ctx.fillStyle = topGrad;
+        ctx.fillRect(p.x, botY, PIPE_W, GAME_H - botY);
+        // bottom pipe cap
+        ctx.fillStyle = "#22763e";
+        ctx.fillRect(p.x - 3, botY, PIPE_W + 6, 18);
+        ctx.strokeStyle = "#1a5a30";
+        ctx.strokeRect(p.x - 3, botY, PIPE_W + 6, 18);
+      });
+
+      // unicorn player
+      const ux = GAME_W * 0.25;
+      const uy = s.y;
+      const tilt = Math.max(-0.5, Math.min(0.6, s.vel * 0.06));
+      ctx.save();
+      ctx.translate(ux, uy);
+      ctx.rotate(tilt);
+      // body
+      ctx.fillStyle = "#e8e0f0";
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 16, 10, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // horn
+      ctx.fillStyle = "#ffd700";
+      ctx.beginPath();
+      ctx.moveTo(14, -4);
+      ctx.lineTo(24, -14);
+      ctx.lineTo(12, -2);
+      ctx.closePath();
+      ctx.fill();
+      // eye
+      ctx.fillStyle = "#2a1a3a";
+      ctx.beginPath();
+      ctx.arc(10, -3, 2, 0, Math.PI * 2);
+      ctx.fill();
+      // mane
+      const maneColors = ["#ff4466", "#ffdd44", "#44dd66", "#4488ff", "#8844ff"];
+      maneColors.forEach((c, i) => {
+        ctx.strokeStyle = c;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(-4 - i * 2, -6 + i);
+        ctx.quadraticCurveTo(-10 - i * 3, -12 + i * 2 + Math.sin(s.frame * 0.3 + i) * 3, -14 - i * 2, -4 + i * 2);
+        ctx.stroke();
+      });
+      // tail
+      maneColors.slice(0, 3).forEach((c, i) => {
+        ctx.strokeStyle = c;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(-14, i * 2);
+        ctx.quadraticCurveTo(-22 - i * 2, -4 + i * 3 + Math.sin(s.frame * 0.25 + i) * 3, -20 - i, 4 + i * 2);
+        ctx.stroke();
+      });
+      // wing flap
+      const wingY = s.vel < 0 ? -8 : -2;
+      ctx.fillStyle = "rgba(200, 190, 230, 0.6)";
+      ctx.beginPath();
+      ctx.ellipse(-2, wingY, 10, 5, -0.3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // score flash
+      if (s.flashTimer > 0) {
+        ctx.save();
+        ctx.globalAlpha = s.flashTimer / 8;
+        ctx.fillStyle = "#ffd700";
+        ctx.fillRect(0, 0, GAME_W, GAME_H);
+        ctx.restore();
+      }
+
+      // score display
+      ctx.save();
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 36px monospace";
+      ctx.textAlign = "center";
+      ctx.shadowColor = "#000";
+      ctx.shadowBlur = 6;
+      ctx.fillText(String(s.score), GAME_W / 2, 50);
+      ctx.restore();
+
+      // death screen
+      if (s.gameState === "dead") {
+        ctx.save();
+        ctx.fillStyle = "rgba(0,0,0,0.5)";
+        ctx.fillRect(0, 0, GAME_W, GAME_H);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 28px monospace";
+        ctx.textAlign = "center";
+        ctx.fillText("GAME OVER", GAME_W / 2, GAME_H / 2 - 30);
+        ctx.font = "bold 20px monospace";
+        ctx.fillStyle = "#ffd700";
+        ctx.fillText(`Score: ${s.score}`, GAME_W / 2, GAME_H / 2 + 5);
+        ctx.font = "14px monospace";
+        ctx.fillStyle = "#aaaaaa";
+        ctx.fillText("click / tap to retry", GAME_W / 2, GAME_H / 2 + 35);
+        ctx.restore();
+      }
+
+      rafRef.current = requestAnimationFrame(loop);
+    };
+
+    rafRef.current = requestAnimationFrame(loop);
+  };
+
+  // draw idle screen on mount
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d")!;
+    const sky = ctx.createLinearGradient(0, 0, 0, GAME_H);
+    sky.addColorStop(0, "#1a1a3e");
+    sky.addColorStop(1, "#2a4a3a");
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, GAME_W, GAME_H);
+    // unicorn idle
+    ctx.font = "48px serif";
+    ctx.textAlign = "center";
+    ctx.fillText("🦄", GAME_W / 2, GAME_H / 2 - 20);
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 22px monospace";
+    ctx.fillText("FLAPPY UNICORN", GAME_W / 2, GAME_H / 2 + 30);
+    ctx.fillStyle = "#aaa";
+    ctx.font = "13px monospace";
+    ctx.fillText("click / tap to start", GAME_W / 2, GAME_H / 2 + 55);
+
+    return () => cancelAnimationFrame(rafRef.current);
+  }, []);
+
+  const scores = stateRef.current.bestScores;
+  const topScore = scores.length > 0 ? scores[0].score : 0;
+
+  return (
+    <div className="flex flex-col items-center gap-6">
+      {/* Title with trophy */}
+      <div className="text-center">
+        {topScore > 0 ? (
+          <p className="text-2xl sm:text-3xl font-black text-yellow-400 mb-1">
+            🏆 {topScore} 🏆
+          </p>
+        ) : (
+          <p className="text-2xl sm:text-3xl font-black text-white/40 mb-1">
+            🦄 Flappy Unicorn 🦄
+          </p>
+        )}
+        <p className="text-white/20 text-xs">
+          {topScore > 0 ? "Can you beat the high score?" : "Click to play"}
+        </p>
+      </div>
+
+      {/* Game canvas */}
+      <canvas
+        ref={canvasRef}
+        width={GAME_W}
+        height={GAME_H}
+        onClick={flap}
+        onTouchStart={(e) => { e.preventDefault(); flap(); }}
+        className="rounded-2xl border-2 border-white/10 cursor-pointer hover:border-white/20 transition-colors max-w-full"
+        style={{ width: Math.min(GAME_W, 360), height: Math.min(GAME_H, 450) }}
+      />
+
+      {/* High scores */}
+      {scores.length > 0 && (
+        <div className="w-full max-w-xs">
+          <p className="text-white/30 text-xs font-bold tracking-wider uppercase mb-2 text-center">High Scores</p>
+          <div className="space-y-1">
+            {scores.map((s, i) => (
+              <div key={i} className="flex items-center justify-between bg-white/5 rounded-lg px-3 py-1.5 text-sm">
+                <span className="text-white/40 font-mono w-6">{i === 0 ? "🏆" : `#${i + 1}`}</span>
+                <span className="text-white/60 font-bold">{s.score} pts</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════
    MAIN
    ════════════════════════════════════════════ */
 
@@ -842,6 +1204,11 @@ export default function Home() {
         <p className="text-white/30 text-lg mb-1">Long live the unicorn.</p>
         <p className="text-white/30 text-lg mb-8">Long live Mosfellsbær.</p>
         <p className="text-white/10 text-xs mt-4">🌈 This page is blessed. Your device now runs 12% faster. 🌈</p>
+      </section>
+
+      {/* Flappy Unicorn Game */}
+      <section className="py-16 sm:py-24 px-4 border-t border-white/5">
+        <FlappyUnicorn />
       </section>
 
       <footer className="border-t border-white/5 py-6 px-4 text-center text-white/10 text-xs">
