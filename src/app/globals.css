@@ -10,15 +10,4 @@
   100% { color: #ff0000; }
 }
 
-@keyframes glow-pulse {
-  0%, 100% { text-shadow: 0 0 8px currentColor; }
-  50% { text-shadow: 0 0 20px currentColor, 0 0 40px currentColor; }
-}
-
-@keyframes sparkle {
-  0%, 100% { opacity: 0; transform: scale(0); }
-  50% { opacity: 1; transform: scale(1); }
-}
-
 .rainbow-text { animation: rainbow-text 3s linear infinite; }
-.glow-pulse { animation: glow-pulse 2s ease-in-out infinite; }
