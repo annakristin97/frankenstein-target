@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "VIR — Viðskiptafræðinemafélag Háskóla Íslands",
-  description: "The student association for business students at the University of Iceland. Events, networking, and good times.",
+  title: "VIR — Félag rafmagns- og tölvuverkfræðinema HÍ",
+  description: "The student association for Electrical and Computer Engineering students at the University of Iceland.",
 };
 
 export default function RootLayout({

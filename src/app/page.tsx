@@ -14,9 +14,9 @@ const board = [
 const events = [
   {
     date: "18. apríl",
-    title: "Fyrirtækjakvöld með Arion banka",
-    desc: "Networking kvöld með fulltrúum Arion banka. Kynning á starfstækifærum og drykkveitingar.",
-    location: "Háskólabíó, salur 1",
+    title: "Fyrirtækjakvöld með Marel",
+    desc: "Networking kvöld með verkfræðingum frá Marel. Kynning á embedded systems verkefnum og drykkveitingar.",
+    location: "VR-II, stofa 258",
     time: "17:00 - 20:00",
     tag: "NETWORKING",
     color: "bg-blue-100 text-blue-700",
@@ -24,7 +24,7 @@ const events = [
   {
     date: "25. apríl",
     title: "VIR Pub Quiz #4",
-    desc: "Fjórði pub quizzinn okkar í vor! Þriggja manna lið. Verðlaun og ódýr bjór.",
+    desc: "Fjórði pub quizzinn okkar í vor! Þriggja manna lið. Spurningar um rásir, kóða og straum. Verðlaun og ódýr bjór.",
     location: "Gaukurinn",
     time: "20:00",
     tag: "FÉLAGSLÍF",
@@ -32,17 +32,17 @@ const events = [
   },
   {
     date: "3. maí",
-    title: "Hagnýt Excel fyrirlestrar",
-    desc: "Workshop um pivot tables, VLOOKUP, og önnur Excel töfra sem þú þarft í prófin og á vinnustaðinn.",
-    location: "Oddi 101",
-    time: "12:00 - 14:00",
-    tag: "NÁMSKEIÐ",
+    title: "Soldering & PCB Workshop",
+    desc: "Hands-on workshop þar sem þú lóðar þína eigin PCB rás. Allt efni meðfylgjandi. Byrjendur velkomnir!",
+    location: "VR-II, tilraunastofa",
+    time: "12:00 - 16:00",
+    tag: "VERKSTÆÐI",
     color: "bg-green-100 text-green-700",
   },
   {
     date: "10. maí",
     title: "Vorball VIR 2026",
-    desc: "Stærsti viðburður varsins! DJ, matseðill, open bar frá 22-23, og verðlaun fyrir bestu búninga.",
+    desc: "Stærsti viðburður varsins! DJ, matseðill, open bar frá 22-23, og LED ljósasýning hönnuð af okkar eigin fólki.",
     location: "Gamla Bíó",
     time: "20:00 - 03:00",
     tag: "BALL",
@@ -51,22 +51,22 @@ const events = [
 ];
 
 const sponsors = [
-  "Arion banki", "Deloitte", "KPMG", "Íslandsbanki",
-  "Landsbankinn", "PwC", "Síminn", "Kvika",
+  "Marel", "Síminn", "Landsnet", "Ölgerðin",
+  "Controlant", "Össur", "CCP Games", "Atea",
 ];
 
 const faqs = [
   {
     q: "Hvernig skrái ég mig í VIR?",
-    a: "Allir nemendur í viðskiptafræðideild HÍ eru sjálfkrafa meðlimir! Þú þarft bara að mæta á viðburði og hafa gaman.",
+    a: "Allir nemendur í rafmagns- og tölvuverkfræði við HÍ eru sjálfkrafa meðlimir! Þú þarft bara að mæta á viðburði og hafa gaman.",
   },
   {
     q: "Hvað kostar að vera í VIR?",
     a: "Ekkert! Félagsgjöld eru innifalin í skrásetningargjaldi HÍ. Sumir viðburðir eru með aðgangseyri.",
   },
   {
-    q: "Er VIR bara fyrir viðskiptafræðinema?",
-    a: "VIR er aðallega fyrir viðskiptafræðinema en allir eru velkomnir á opna viðburði okkar.",
+    q: "Er VIR bara fyrir ECE nemendur?",
+    a: "VIR er aðallega fyrir rafmagns- og tölvuverkfræðinema en allir verkfræðinemar og aðrir áhugasamir eru velkomnir á opna viðburði okkar.",
   },
   {
     q: "Hvernig get ég komist í stjórnina?",
@@ -74,7 +74,7 @@ const faqs = [
   },
   {
     q: "Hvar finn ég ykkur?",
-    a: "Við erum oftar en ekki í Oddi, á 2. hæð. Einnig á Instagram @vir_hi og í tölvupósti vir@hi.is.",
+    a: "Við erum oftar en ekki í VR-II, á 2. hæð. Einnig á Instagram @vir_hi og í tölvupósti vir@hi.is.",
   },
 ];
 
@@ -92,7 +92,7 @@ export default function Home() {
             </div>
             <div className="leading-tight">
               <span className="text-lg font-bold tracking-tight block">VIR</span>
-              <span className="text-[10px] text-gray-400 tracking-wider uppercase hidden sm:block">Viðskiptafræðinemafélagið</span>
+              <span className="text-[10px] text-gray-400 tracking-wider uppercase hidden sm:block">Rafmagns- og tölvuverkfræði</span>
             </div>
           </div>
           <div className="hidden md:flex items-center gap-6 text-sm text-gray-500 font-medium">
@@ -118,17 +118,17 @@ export default function Home() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/90 text-sm font-medium px-4 py-1.5 rounded-full mb-6 backdrop-blur-sm">
-              <span className="text-lg">🎓</span>
-              Háskóli Íslands — Viðskiptafræðideild
+              <span className="text-lg">⚡</span>
+              Háskóli Íslands — Rafmagns- og tölvuverkfræðideild
             </div>
             <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight leading-[1.05] mb-6">
               VIR
             </h1>
             <p className="text-xl sm:text-2xl text-white/70 font-light mb-2">
-              Viðskiptafræðinemafélag Háskóla Íslands
+              Félag rafmagns- og tölvuverkfræðinema HÍ
             </p>
             <p className="text-base sm:text-lg text-white/50 max-w-xl mb-8 leading-relaxed">
-              Networking. Viðburðir. Fyrirtækjatengslakvöld. Pub quiz. Og vorballið sem allir tala um til jóla. Við erum félagið þitt í viðskiptafræðideild.
+              Networking. Viðburðir. Hackathons. Lóðun. Pub quiz. Og vorballið sem allir tala um til jóla. Við erum félagið þitt í ECE deildinni.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <a
@@ -153,7 +153,7 @@ export default function Home() {
       <section className="border-b border-gray-100 bg-gray-50 py-10 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {[
-            { val: "500+", label: "Meðlimir" },
+            { val: "300+", label: "Meðlimir" },
             { val: "30+", label: "Viðburðir á ári" },
             { val: "15+", label: "Samstarfsfyrirtæki" },
             { val: "1", label: "Legendískt vorball" },
@@ -217,22 +217,22 @@ export default function Home() {
               {
                 icon: "🤝",
                 title: "Networking",
-                desc: "Fyrirtækjakvöld, ráðstefnur, og tengslaviðburðir með stærstu fyrirtækjum landsins. Þetta er hvar þú hittir framtíðarvinnuveitandann þinn.",
+                desc: "Fyrirtækjakvöld með Marel, Símanum, Landsnet og fleirum. Þetta er hvar þú hittir framtíðarvinnuveitandann þinn í verkfræði og tækni.",
               },
               {
                 icon: "🎊",
                 title: "Félagslíf",
-                desc: "Pub quiz, hlaðborð, skemmtikvöld, og auðvitað vorballið. Við vitum að nemendur lifa ekki af náminu einu saman.",
+                desc: "Pub quiz, hlaðborð, LAN parties, og auðvitað vorballið. Við vitum að nemendur lifa ekki af diffurjöfnum einum saman.",
               },
               {
-                icon: "📚",
-                title: "Námsaðstoð",
-                desc: "Excel námskeið, prófundirbúningur, og ráðgjöf frá eldri nemendum. Við hjálpum þér að ná toppeinkunnum.",
+                icon: "🔧",
+                title: "Verkstæði & Hackathons",
+                desc: "Lóðunarnámskeið, Arduino workshops, hackathons, og PCB hönnun. Hands-on reynsla sem þú færð ekki í kennslustofunni.",
               },
               {
-                icon: "🌍",
+                icon: "⚡",
                 title: "Samfélag",
-                desc: "500+ nemendur sem deila sömu ástríðu fyrir viðskiptum. Þetta er netið þitt, ekki bara í skólanum heldur alla ævi.",
+                desc: "300+ nemendur sem deila sömu ástríðu fyrir rásarhönnun, forritun og rafmagnsverkfræði. Þetta er netið þitt alla ævi.",
               },
             ].map((item) => (
               <div key={item.title} className="bg-white rounded-2xl p-6 border border-gray-200">
@@ -320,12 +320,12 @@ export default function Home() {
       <section className="py-16 sm:py-24 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto">
           <div className="hero-gradient rounded-3xl p-8 sm:p-14 text-center text-white">
-            <p className="text-5xl mb-4">🎓</p>
+            <p className="text-5xl mb-4">⚡</p>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
               Vertu með!
             </h2>
             <p className="text-white/70 text-lg max-w-md mx-auto mb-8">
-              Fylgdu okkur á Instagram, mættu á næsta viðburð, og vertu partur af besta félaginu í HÍ.
+              Fylgdu okkur á Instagram, mættu á næsta viðburð, og vertu partur af besta verkfræðifélaginu í HÍ.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
@@ -358,7 +358,7 @@ export default function Home() {
           </div>
           <div className="flex gap-6 text-sm text-gray-400">
             <span>vir@hi.is</span>
-            <span>Oddi, 2. hæð</span>
+            <span>VR-II, 2. hæð</span>
             <span>@vir_hi</span>
           </div>
         </div>
