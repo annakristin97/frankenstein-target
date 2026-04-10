@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Gagnavél — IT that actually works",
-  description: "Icelandic IT services, cloud, cybersecurity, and managed infrastructure. We replaced Gagnverk so you don't have to.",
+  title: "VIR — Viðskiptafræðinemafélag Háskóla Íslands",
+  description: "The student association for business students at the University of Iceland. Events, networking, and good times.",
 };
 
 export default function RootLayout({
