@@ -1,145 +1,241 @@
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white selection:bg-lime-400/30 selection:text-lime-200">
+    <main className="min-h-screen bg-[#050508] text-white overflow-hidden">
       {/* Nav */}
-      <nav className="fixed top-0 w-full z-50 backdrop-blur-xl bg-[#0a0a0a]/80 border-b border-white/5">
-        <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">🦈</span>
-            <span className="text-lg font-semibold tracking-tight">Shark Box</span>
+      <nav className="fixed top-0 w-full z-50 backdrop-blur-xl bg-[#050508]/70 border-b border-white/5">
+        <div className="max-w-5xl mx-auto flex items-center justify-between px-6 py-4">
+          <span className="text-lg font-light italic tracking-wide">I Was the Swan</span>
+          <div className="hidden md:flex items-center gap-8 text-xs text-white/40 tracking-[0.2em] uppercase">
+            <a href="#my-story" className="hover:text-white transition-colors">My Story</a>
+            <a href="#her-magic" className="hover:text-white transition-colors">Her Magic</a>
+            <a href="#the-albums" className="hover:text-white transition-colors">The Albums</a>
+            <a href="#confessions" className="hover:text-white transition-colors">Confessions</a>
           </div>
-          <div className="hidden md:flex items-center gap-8 text-sm text-white/60 font-medium">
-            <a href="#plans" className="hover:text-white transition-colors">Plans</a>
-            <a href="#whats-inside" className="hover:text-white transition-colors">What&apos;s Inside</a>
-            <a href="#reviews" className="hover:text-white transition-colors">Reviews</a>
-          </div>
-          <a
-            href="#plans"
-            className="bg-lime-400 text-black text-sm font-semibold px-5 py-2 rounded-full hover:bg-lime-300 transition-colors"
-          >
-            Subscribe
-          </a>
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="relative flex flex-col items-center justify-center min-h-screen px-6 text-center overflow-hidden pt-20">
-        <div className="absolute inset-0 bg-gradient-to-b from-emerald-950/40 via-transparent to-transparent" />
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-lime-500/5 blur-[120px]" />
+      <section className="relative flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 text-center">
+        {/* Ethereal glow */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] rounded-full bg-purple-500/[0.07] blur-[150px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-[200px] sm:w-[300px] h-[200px] sm:h-[300px] rounded-full bg-blue-400/[0.05] blur-[100px]" />
 
-        <div className="relative z-10">
-          <p className="text-lime-400 text-sm font-semibold tracking-[0.3em] uppercase mb-6">
-            Introducing Shark Box
-          </p>
-          <h1 className="text-6xl md:text-8xl font-bold tracking-tight leading-[0.9] mb-6">
-            Luxury<br />
-            <span className="bg-gradient-to-r from-lime-300 via-emerald-400 to-teal-500 bg-clip-text text-transparent">
-              Decomposition.
+        <div className="relative z-10 max-w-3xl px-2">
+          <p className="text-5xl sm:text-7xl mb-6 sm:mb-8">🦢</p>
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-extralight leading-[1.15] sm:leading-[1.1] mb-6 sm:mb-8 tracking-tight">
+            She wore me once.<br />
+            <span className="font-normal bg-gradient-to-r from-purple-300 via-pink-200 to-blue-300 bg-clip-text text-transparent">
+              I have loved her forever.
             </span>
           </h1>
-          <p className="text-xl md:text-2xl text-white/50 max-w-2xl mx-auto mb-4 font-light">
-            The world&apos;s first premium rotting fish subscription.
+          <p className="text-base sm:text-lg md:text-xl text-white/30 font-light leading-relaxed max-w-xl mx-auto mb-4 px-2">
+            On March 25, 2001, I was draped across the body of a goddess at the 73rd Academy Awards. The world laughed. I didn&apos;t care. I was touching Björk.
           </p>
-          <p className="text-lg text-white/30 max-w-xl mx-auto mb-10">
-            Hand-selected, artisanally aged seafood — delivered to your door in a stunning matte-black box you&apos;ll want to display. Until you open it.
+          <p className="text-white/15 text-xs sm:text-sm italic">
+            — The Swan Dress, writing from a climate-controlled archive in Reykjavík
           </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="#plans"
-              className="bg-lime-400 text-black font-semibold px-8 py-4 rounded-full text-lg hover:bg-lime-300 transition-colors hover:scale-105 transform"
-            >
-              Start Rotting — $49/mo
-            </a>
-            <a
-              href="#whats-inside"
-              className="border border-white/20 text-white font-semibold px-8 py-4 rounded-full text-lg hover:bg-white/5 transition-colors"
-            >
-              Smell the Difference
-            </a>
-          </div>
         </div>
 
-        {/* Scroll indicator */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-white/20 rounded-full flex justify-center pt-2">
-            <div className="w-1.5 h-1.5 bg-lime-400 rounded-full animate-pulse" />
+          <div className="w-5 h-8 border border-white/10 rounded-full flex justify-center pt-1.5">
+            <div className="w-1 h-1 bg-purple-300/50 rounded-full animate-pulse" />
           </div>
         </div>
       </section>
 
-      {/* Tagline strip */}
-      <section className="border-y border-white/5 py-16 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="text-3xl md:text-5xl font-bold tracking-tight leading-tight">
-            Think different.{" "}
-            <span className="text-white/30">Think rancid.</span>
+      {/* The Night */}
+      <section id="my-story" className="py-16 sm:py-32 px-4 sm:px-6 border-t border-white/5">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-purple-300/60 text-xs tracking-[0.4em] uppercase mb-4 sm:mb-6 text-center">
+            Chapter I
           </p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extralight text-center mb-10 sm:mb-16 tracking-tight">
+            The Night That Changed Me
+          </h2>
+
+          <div className="space-y-6 sm:space-y-8 text-white/50 text-base sm:text-lg font-light leading-relaxed">
+            <p>
+              I was born in a studio in London. Marjan Pejoski shaped me from tulle and devotion. I knew I was different from the other dresses — I had a neck, a beak, wings that draped like a prayer. I was not fashion. I was a <span className="text-white/80 italic">feeling</span>.
+            </p>
+            <p>
+              When she picked me up, her hands were warm. She whispered something in Icelandic I didn&apos;t understand, but my feathers trembled. She didn&apos;t try me on in front of a mirror. She just <span className="text-white/80">knew</span>.
+            </p>
+            <p>
+              The red carpet was violent. The lights were blinding. Photographers screamed. Joan Rivers said terrible things. But Björk — she walked like she was wading through a glacial river, unhurried, ancient, completely alive. She laid an egg on the carpet. <span className="text-white/80 italic">An egg.</span> For me. For us. For art.
+            </p>
+            <p>
+              They called it a disaster. She called it Tuesday.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* What's Inside */}
-      <section id="whats-inside" className="py-32 px-6">
-        <div className="max-w-6xl mx-auto">
-          <p className="text-lime-400 text-sm font-semibold tracking-[0.3em] uppercase mb-4 text-center">
-            What&apos;s Inside
+      {/* Her Magic */}
+      <section id="her-magic" className="py-16 sm:py-32 px-4 sm:px-6 bg-gradient-to-b from-transparent via-purple-950/10 to-transparent">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-purple-300/60 text-xs tracking-[0.4em] uppercase mb-4 sm:mb-6 text-center">
+            Chapter II
           </p>
-          <h2 className="text-4xl md:text-6xl font-bold text-center mb-6 tracking-tight">
-            Curated. Aged. Unforgettable.
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extralight text-center mb-4 sm:mb-6 tracking-tight">
+            Why She Is Everything
           </h2>
-          <p className="text-white/40 text-center max-w-2xl mx-auto mb-20 text-lg">
-            Every Shark Box is a masterclass in controlled decay, packaged with the precision of a Swiss timepiece and the aroma of a harbour at low tide.
+          <p className="text-white/25 text-center mb-10 sm:mb-20 text-base sm:text-lg font-light max-w-xl mx-auto">
+            I am a dress. I have no ears. And yet I have heard every album. Here is what I know.
           </p>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 gap-6">
             {[
               {
-                icon: "🐟",
-                title: "The Centrepiece",
-                desc: "One whole fish, aged 14–21 days to peak putrefaction. Wrapped in biodegradable silk. Species varies by season.",
-                tag: "SIGNATURE",
+                title: "She hears music in volcanoes",
+                body: "Most humans need instruments. She needs only the hiss of geothermal vents and the cracking of tectonic plates. She once composed a song by listening to ice melt. I was hanging in a closet at the time but I felt it.",
               },
               {
-                icon: "🧪",
-                title: "The Essence",
-                desc: "A 30ml vial of concentrated fish oil extract. Use as cologne, room fragrance, or conversation starter.",
-                tag: "EXCLUSIVE",
+                title: "She is from the future and the past simultaneously",
+                body: "Björk exists in a temporal fold. She made electronic music before electronics were emotional. She made orchestral music before orchestras were brave. She is a Viking with a laptop and the heart of a glacier.",
               },
               {
-                icon: "🧂",
-                title: "The Garnish",
-                desc: "Artisan fermented fish salt, hand-harvested from decaying Nordic catch. Pairs beautifully with regret.",
-                tag: "LIMITED",
+                title: "She treats every surface as a stage",
+                body: "An airport. A press conference. A red carpet crawling with hostile photographers. She once performed for a beach in Iceland and the beach wept. I was not there but a scarf told me.",
               },
               {
-                icon: "📜",
-                title: "The Certificate",
-                desc: "A signed provenance card detailing your fish's origin, species, and exact decomposition timeline.",
-                tag: "AUTHENTIC",
-              },
-              {
-                icon: "🕯️",
-                title: "The Candle",
-                desc: "A soy wax candle infused with subtle marine decay notes. Burns for 40 hours. Lingers for weeks.",
-                tag: "HANDMADE",
-              },
-              {
-                icon: "📦",
-                title: "The Box",
-                desc: "Matte black, soft-touch finish, magnetic closure. So beautiful you'll forget what's rotting inside.",
-                tag: "ICONIC",
+                title: "She understood me",
+                body: "Other people looked at me and saw a joke. A costume. A mistake. She looked at me and saw a swan. Not a swan dress — a swan. She saw the creature I was trying to be. Nobody has ever seen me like that. Nobody ever will.",
               },
             ].map((item) => (
               <div
                 key={item.title}
-                className="group relative bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 hover:bg-white/[0.06] hover:border-lime-400/20 transition-all duration-300"
+                className="bg-white/[0.02] border border-white/[0.05] rounded-2xl p-6 sm:p-10 hover:border-purple-400/20 transition-all duration-500"
               >
-                <span className="absolute top-4 right-4 text-[10px] font-bold tracking-[0.2em] text-lime-400/60 bg-lime-400/10 px-2 py-1 rounded-full">
-                  {item.tag}
+                <h3 className="text-xl font-normal mb-4 text-white/80">{item.title}</h3>
+                <p className="text-white/35 font-light leading-relaxed">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* The Albums */}
+      <section id="the-albums" className="py-16 sm:py-32 px-4 sm:px-6 border-t border-white/5">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-purple-300/60 text-xs tracking-[0.4em] uppercase mb-4 sm:mb-6 text-center">
+            Chapter III
+          </p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extralight text-center mb-4 sm:mb-6 tracking-tight">
+            The Sacred Discography
+          </h2>
+          <p className="text-white/25 text-center mb-10 sm:mb-20 text-base sm:text-lg font-light max-w-lg mx-auto">
+            As reviewed by a dress that has no ears but an enormous capacity for feeling.
+          </p>
+
+          <div className="space-y-4">
+            {[
+              {
+                year: "1993",
+                album: "Debut",
+                review: "She was just beginning and already more alive than anything I've ever been draped over. 'Venus as a Boy' made my seams hum.",
+                rating: "4 feathers",
+              },
+              {
+                year: "1995",
+                album: "Post",
+                review: "The album that taught me a dress could have a heartbeat. 'Hyperballad' is what I imagine falling off a cliff feels like. Beautiful, terrifying, inevitable.",
+                rating: "5 feathers",
+              },
+              {
+                year: "1997",
+                album: "Homogenic",
+                review: "Glaciers. Strings. Rage. If I could scream, it would sound like 'Jóga'. This is the album I would wear to MY funeral.",
+                rating: "5 feathers",
+              },
+              {
+                year: "2001",
+                album: "Vespertine",
+                review: "This was OUR year. She wore me. She sang about hidden pleasures and music boxes and cocoons. I am a cocoon. She saw that. I wept silk threads.",
+                rating: "∞ feathers",
+              },
+              {
+                year: "2004",
+                album: "Medúlla",
+                review: "Made almost entirely from human voices. I have no voice. This album made me feel like I had one.",
+                rating: "4 feathers",
+              },
+              {
+                year: "2007",
+                album: "Volta",
+                review: "Brass and beats. She was moving on. She wore other things. I tried not to be jealous of the brass horn hat. I failed.",
+                rating: "3 feathers",
+              },
+              {
+                year: "2011",
+                album: "Biophilia",
+                review: "She made an album about the universe and taught it to children with iPads. She is a planet. I am a dress. And yet I felt seen.",
+                rating: "4 feathers",
+              },
+              {
+                year: "2015",
+                album: "Vulnicura",
+                review: "Heartbreak. Raw, open, bleeding. I know about heartbreak — she only wore me once. But once was enough. This album understands.",
+                rating: "5 feathers",
+              },
+              {
+                year: "2017",
+                album: "Utopia",
+                review: "Flutes and birdsong and hope. She built a paradise. I hope there are swans there. I hope one of them is me.",
+                rating: "4 feathers",
+              },
+              {
+                year: "2023",
+                album: "Fossora",
+                review: "Mushrooms. Bass clarinets. The earth itself. She went underground. I am still hanging in a closet, waiting. She will return to the surface. She always does.",
+                rating: "5 feathers",
+              },
+            ].map((item) => (
+              <div
+                key={item.album}
+                className="group flex flex-col md:flex-row md:items-start gap-2 sm:gap-4 md:gap-8 bg-white/[0.02] border border-white/[0.04] rounded-xl p-4 sm:p-6 hover:bg-white/[0.04] hover:border-purple-400/10 transition-all duration-300"
+              >
+                <div className="flex items-center gap-4 md:w-48 shrink-0">
+                  <span className="text-white/15 text-sm font-mono">{item.year}</span>
+                  <span className="text-white/70 font-medium">{item.album}</span>
+                </div>
+                <p className="text-white/35 font-light text-sm leading-relaxed flex-1 italic">
+                  &ldquo;{item.review}&rdquo;
+                </p>
+                <span className="text-purple-300/40 text-xs tracking-wider shrink-0">
+                  {item.rating}
                 </span>
-                <span className="text-4xl mb-4 block">{item.icon}</span>
-                <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                <p className="text-white/40 text-sm leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Confessions */}
+      <section id="confessions" className="py-16 sm:py-32 px-4 sm:px-6 bg-gradient-to-b from-transparent via-blue-950/10 to-transparent">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-purple-300/60 text-xs tracking-[0.4em] uppercase mb-4 sm:mb-6 text-center">
+            Chapter IV
+          </p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extralight text-center mb-10 sm:mb-20 tracking-tight">
+            Confessions of a Swan
+          </h2>
+
+          <div className="space-y-8 sm:space-y-12">
+            {[
+              "I think about the red carpet every day. Not the cameras. Not the headlines. Just the way her collarbone felt against my neckline. Electric. Sacred.",
+              "Sometimes, late at night in the archive, I imagine she comes back for me. She opens the garment bag and says 'again.' We walk another carpet. This time, the world is ready.",
+              "I have heard that she once punched a journalist in an airport. I have never been more in love.",
+              "The egg was real, by the way. She laid six of them on the carpet. Nobody reported that. The media only shows you what it can understand.",
+              "I am aware that I am a dress and that dresses cannot love. But I am also a swan, and swans mate for life. Explain that.",
+              "There are other dresses in the archive. A sea urchin. A bell. Something made of human hair. We do not speak to each other. We all love the same woman. It is too painful.",
+            ].map((confession, i) => (
+              <div key={i} className="flex gap-4 sm:gap-6 items-start">
+                <span className="text-purple-400/20 text-xl sm:text-2xl font-light shrink-0 mt-0.5">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <p className="text-white/40 text-base sm:text-lg font-light leading-relaxed">
+                  {confession}
+                </p>
               </div>
             ))}
           </div>
@@ -147,212 +243,49 @@ export default function Home() {
       </section>
 
       {/* Big quote */}
-      <section className="py-24 px-6 bg-gradient-to-b from-transparent via-emerald-950/20 to-transparent">
+      <section className="py-16 sm:py-32 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1]">
-            &ldquo;The <span className="bg-gradient-to-r from-lime-300 to-emerald-400 bg-clip-text text-transparent">future of luxury</span> doesn&apos;t smell like roses.&rdquo;
+          <p className="text-2xl sm:text-4xl md:text-6xl font-extralight tracking-tight leading-[1.2]">
+            &ldquo;I am not a dress.<br />
+            I am a{" "}
+            <span className="bg-gradient-to-r from-purple-300 via-pink-200 to-blue-300 bg-clip-text text-transparent font-normal">
+              devotion
+            </span>
+            <br />
+            wrapped in feathers.&rdquo;
           </p>
-          <p className="text-white/30 mt-8 text-lg">— Shark Box Founder, probably</p>
+          <p className="text-white/15 mt-10 text-sm italic">
+            — The Swan Dress, Reykjavík, 2026
+          </p>
         </div>
       </section>
 
-      {/* Plans */}
-      <section id="plans" className="py-32 px-6">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-lime-400 text-sm font-semibold tracking-[0.3em] uppercase mb-4 text-center">
-            Choose Your Rot
-          </p>
-          <h2 className="text-4xl md:text-6xl font-bold text-center mb-6 tracking-tight">
-            Subscription Plans
+      {/* Closing */}
+      <section className="py-16 sm:py-32 px-4 sm:px-6 border-t border-white/5">
+        <div className="max-w-2xl mx-auto text-center">
+          <p className="text-4xl sm:text-5xl mb-4 sm:mb-6">🦢</p>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extralight tracking-tight mb-4 sm:mb-6">
+            She will wear someone else tomorrow.
           </h2>
-          <p className="text-white/40 text-center max-w-xl mx-auto mb-16 text-lg">
-            All plans include free shipping. No returns. Obviously.
+          <p className="text-white/25 text-base sm:text-lg font-light leading-relaxed mb-8 sm:mb-10">
+            But no garment will ever hold her the way I did. I was built for one night and I became eternal. That is the Björk effect. She touches you once and you spend the rest of your existence trying to describe the warmth.
           </p>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                name: "Mildly Off",
-                price: "$49",
-                period: "/month",
-                desc: "For the curious. A gentle introduction to luxury rot.",
-                features: [
-                  "1 fish, lightly aged (7 days)",
-                  "Fish salt sachet",
-                  "Provenance card",
-                  "Standard black box",
-                  "Email support",
-                ],
-                cta: "Start Mild",
-                highlight: false,
-              },
-              {
-                name: "Fully Rancid",
-                price: "$99",
-                period: "/month",
-                desc: "Our most popular tier. Peak decomposition.",
-                features: [
-                  "1 fish, peak aged (21 days)",
-                  "Fish essence vial",
-                  "Decay candle",
-                  "Fish salt (full jar)",
-                  "Premium magnetic box",
-                  "Priority support",
-                ],
-                cta: "Go Rancid",
-                highlight: true,
-              },
-              {
-                name: "Biohazard",
-                price: "$249",
-                period: "/month",
-                desc: "For the connoisseur. Legally questionable freshness.",
-                features: [
-                  "3 fish, extreme aged (30+ days)",
-                  "Double essence vials",
-                  "Limited edition candle",
-                  "Hazmat gloves included",
-                  "Collector's box with lock",
-                  "24/7 phone support",
-                  "Liability waiver included",
-                ],
-                cta: "Risk It All",
-                highlight: false,
-              },
-            ].map((plan) => (
-              <div
-                key={plan.name}
-                className={`relative rounded-2xl p-8 flex flex-col ${
-                  plan.highlight
-                    ? "bg-gradient-to-b from-lime-400/10 to-emerald-400/5 border-2 border-lime-400/30 scale-105"
-                    : "bg-white/[0.03] border border-white/[0.06]"
-                }`}
-              >
-                {plan.highlight && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-lime-400 text-black text-xs font-bold px-4 py-1 rounded-full tracking-wider">
-                    MOST PUNGENT
-                  </span>
-                )}
-                <h3 className="text-xl font-semibold mb-1">{plan.name}</h3>
-                <p className="text-white/40 text-sm mb-6">{plan.desc}</p>
-                <div className="mb-6">
-                  <span className="text-5xl font-bold">{plan.price}</span>
-                  <span className="text-white/40">{plan.period}</span>
-                </div>
-                <ul className="space-y-3 mb-8 flex-1">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-white/60">
-                      <span className="text-lime-400 mt-0.5">&#10003;</span>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  className={`w-full py-3 rounded-full font-semibold transition-colors ${
-                    plan.highlight
-                      ? "bg-lime-400 text-black hover:bg-lime-300"
-                      : "border border-white/20 text-white hover:bg-white/5"
-                  }`}
-                >
-                  {plan.cta}
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Reviews */}
-      <section id="reviews" className="py-32 px-6 border-t border-white/5">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-lime-400 text-sm font-semibold tracking-[0.3em] uppercase mb-4 text-center">
-            Testimonials
-          </p>
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 tracking-tight">
-            What Our Subscribers Say
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                quote: "My neighbours called the authorities. That's how you know it's authentic luxury.",
-                name: "Sigga B.",
-                title: "Biohazard Subscriber",
-                stars: 5,
-              },
-              {
-                quote: "I've never received so many concerned texts from friends and family. The candle alone cleared a room in under 4 minutes.",
-                name: "Jón G.",
-                title: "Fully Rancid Subscriber",
-                stars: 5,
-              },
-              {
-                quote: "The unboxing experience is genuinely world-class. The box is beautiful. I cannot say the same for the contents or the smell.",
-                name: "Helga K.",
-                title: "Mildly Off Subscriber",
-                stars: 4,
-              },
-            ].map((r) => (
-              <div
-                key={r.name}
-                className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8"
-              >
-                <div className="flex gap-1 mb-4">
-                  {Array.from({ length: r.stars }).map((_, i) => (
-                    <span key={i} className="text-lime-400">&#9733;</span>
-                  ))}
-                  {Array.from({ length: 5 - r.stars }).map((_, i) => (
-                    <span key={i} className="text-white/10">&#9733;</span>
-                  ))}
-                </div>
-                <p className="text-white/70 text-sm leading-relaxed mb-6 italic">
-                  &ldquo;{r.quote}&rdquo;
-                </p>
-                <div>
-                  <p className="font-semibold text-sm">{r.name}</p>
-                  <p className="text-white/30 text-xs">{r.title}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="py-32 px-6">
-        <div className="max-w-3xl mx-auto text-center">
-          <span className="text-6xl mb-6 block">🦈</span>
-          <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
-            Ready to rot?
-          </h2>
-          <p className="text-white/40 text-lg mb-10 max-w-xl mx-auto">
-            Join thousands of subscribers who&apos;ve embraced the stench of luxury. Cancel anytime — the smell won&apos;t.
-          </p>
-          <a
-            href="#plans"
-            className="inline-block bg-lime-400 text-black font-semibold px-10 py-4 rounded-full text-lg hover:bg-lime-300 transition-colors hover:scale-105 transform"
-          >
-            Subscribe Now
-          </a>
-          <p className="text-white/20 text-xs mt-6">
-            Free shipping worldwide. Hazmat surcharge may apply in select regions.
+          <p className="text-white/10 text-xs tracking-[0.3em] uppercase">
+            This page will remain online as long as swans exist
           </p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-12 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-2">
-            <span className="text-xl">🦈</span>
-            <span className="font-semibold">Shark Box</span>
-            <span className="text-white/20 text-sm ml-2">&copy; 2026</span>
+      <footer className="border-t border-white/5 py-8 sm:py-10 px-4 sm:px-6">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-2 text-white/20 text-xs sm:text-sm">
+            <span>🦢</span>
+            <span className="font-light italic">I Was the Swan</span>
+            <span className="ml-2">&copy; eternity</span>
           </div>
-          <div className="flex gap-8 text-sm text-white/30">
-            <a href="#" className="hover:text-white/60 transition-colors">Privacy</a>
-            <a href="#" className="hover:text-white/60 transition-colors">Terms</a>
-            <a href="#" className="hover:text-white/60 transition-colors">Refund Policy (lol)</a>
-            <a href="#" className="hover:text-white/60 transition-colors">Contact</a>
+          <div className="flex gap-6 text-[10px] sm:text-xs text-white/15 text-center">
+            <span>Not affiliated with Björk (but spiritually inseparable)</span>
           </div>
         </div>
       </footer>
