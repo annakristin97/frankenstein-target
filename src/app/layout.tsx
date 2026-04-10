@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Frankenstein App",
-  description: "Built live by AI, one prompt at a time",
+  title: "Shark Box — Luxury Decomposition, Delivered.",
+  description: "The world's first premium rotting fish subscription. Curated decay, monthly.",
 };
 
 export default function RootLayout({
