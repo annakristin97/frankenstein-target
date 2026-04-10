@@ -1,23 +1,5 @@
 @import "tailwindcss";
 
-@keyframes ride {
-  0% { transform: translateX(-100vw) translateY(0); }
-  25% { transform: translateX(-30vw) translateY(-30px); }
-  50% { transform: translateX(10vw) translateY(0); }
-  75% { transform: translateX(50vw) translateY(-20px); }
-  100% { transform: translateX(110vw) translateY(0); }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
-}
-
-@keyframes sparkle {
-  0%, 100% { opacity: 0; transform: scale(0); }
-  50% { opacity: 1; transform: scale(1); }
-}
-
 @keyframes rainbow-text {
   0% { color: #ff0000; }
   16% { color: #ff8800; }
@@ -29,18 +11,14 @@
 }
 
 @keyframes glow-pulse {
-  0%, 100% { text-shadow: 0 0 8px currentColor, 0 0 16px currentColor; }
-  50% { text-shadow: 0 0 16px currentColor, 0 0 32px currentColor, 0 0 48px currentColor; }
+  0%, 100% { text-shadow: 0 0 8px currentColor; }
+  50% { text-shadow: 0 0 20px currentColor, 0 0 40px currentColor; }
 }
 
-@keyframes neon-border-text {
-  0%, 100% { filter: drop-shadow(0 0 6px #ff00ff); }
-  33% { filter: drop-shadow(0 0 6px #00ffff); }
-  66% { filter: drop-shadow(0 0 6px #ffff00); }
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
 }
 
-.ride-animation { animation: ride 8s ease-in-out infinite; }
-.float-animation { animation: float 3s ease-in-out infinite; }
 .rainbow-text { animation: rainbow-text 3s linear infinite; }
-.glow-pulse { animation: glow-pulse 2.5s ease-in-out infinite; }
-.neon-border-text { animation: neon-border-text 3s linear infinite; }
+.glow-pulse { animation: glow-pulse 2s ease-in-out infinite; }
