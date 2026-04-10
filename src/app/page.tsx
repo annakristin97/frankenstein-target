@@ -394,55 +394,139 @@ function renderScene2(ctx: CanvasRenderingContext2D, w: number, h: number, t: nu
   drawText(ctx, "Chapter II: The Ride", w / 2, h * 0.92, 16, "#ff88cc", 0.4);
 }
 
+function drawFirework(ctx: CanvasRenderingContext2D, cx: number, cy: number, age: number, color: string, seed: number) {
+  const particleCount = 40;
+  const maxR = 120 + seed * 60;
+  const gravity = age * age * 80;
+
+  for (let i = 0; i < particleCount; i++) {
+    const angle = (i / particleCount) * Math.PI * 2 + seed;
+    const speed = 0.6 + ((i * 7 + seed * 13) % 10) / 10 * 0.8;
+    const r = age * maxR * speed;
+    const px = cx + Math.cos(angle) * r + Math.sin(seed * 3 + i) * age * 15;
+    const py = cy + Math.sin(angle) * r + gravity;
+    const alpha = Math.max(0, 1 - age * 1.2) * (0.6 + Math.sin(i + age * 10) * 0.4);
+    const size = lerp(4, 1, age);
+
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 15;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(px, py, size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // trailing spark
+    if (age < 0.7) {
+      ctx.save();
+      ctx.globalAlpha = alpha * 0.3;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      const trailR = r * 0.7;
+      ctx.moveTo(cx + Math.cos(angle) * trailR + Math.sin(seed * 3 + i) * age * 10, cy + Math.sin(angle) * trailR + gravity * 0.6);
+      ctx.lineTo(px, py);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  // center flash at birth
+  if (age < 0.15) {
+    const flashAlpha = (1 - age / 0.15) * 0.8;
+    ctx.save();
+    ctx.globalAlpha = flashAlpha;
+    ctx.fillStyle = "#ffffff";
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 60;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 8 * (1 - age / 0.15), 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+function drawShockwave(ctx: CanvasRenderingContext2D, cx: number, cy: number, age: number) {
+  const r = age * 300;
+  const alpha = Math.max(0, 1 - age) * 0.6;
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = lerp(8, 1, age);
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.stroke();
+  // inner rainbow ring
+  const colors = ["#ff4466", "#ff8844", "#ffdd44", "#44dd66", "#4488ff"];
+  colors.forEach((c, i) => {
+    ctx.globalAlpha = alpha * 0.4;
+    ctx.strokeStyle = c;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r * (0.85 + i * 0.03), 0, Math.PI * 2);
+    ctx.stroke();
+  });
+  ctx.restore();
+}
+
 function renderScene3(ctx: CanvasRenderingContext2D, w: number, h: number, t: number) {
-  // sky: sunset → night → space
+  // PHASES:
+  // 0.00 - 0.45: ascending
+  // 0.45 - 0.50: shaking, glowing, about to blow
+  // 0.50 - 0.55: EXPLOSION + white flash
+  // 0.55 - 1.00: fireworks show
+
   const skyGrad = ctx.createLinearGradient(0, 0, 0, h);
-  if (t < 0.3) {
-    skyGrad.addColorStop(0, `hsl(260, 40%, ${lerp(20, 10, t / 0.3)}%)`);
-    skyGrad.addColorStop(1, `hsl(30, 50%, ${lerp(30, 15, t / 0.3)}%)`);
+  if (t < 0.5) {
+    const dark = Math.min(1, t / 0.45);
+    skyGrad.addColorStop(0, `hsl(260, ${lerp(40, 70, dark)}%, ${lerp(20, 4, dark)}%)`);
+    skyGrad.addColorStop(1, `hsl(260, ${lerp(30, 50, dark)}%, ${lerp(15, 6, dark)}%)`);
   } else {
-    skyGrad.addColorStop(0, `hsl(260, 60%, ${lerp(10, 5, (t - 0.3) / 0.7)}%)`);
-    skyGrad.addColorStop(1, `hsl(260, 40%, ${lerp(15, 8, (t - 0.3) / 0.7)}%)`);
+    skyGrad.addColorStop(0, "#0a0a14");
+    skyGrad.addColorStop(1, "#0d0d1a");
   }
   ctx.fillStyle = skyGrad;
   ctx.fillRect(0, 0, w, h);
 
-  // stars get brighter as we ascend
-  const starBright = Math.min(1, t * 2);
-  for (let i = 0; i < 30; i++) {
+  // stars
+  const starBright = Math.min(1, t * 2.5);
+  for (let i = 0; i < 40; i++) {
     const sx = ((i * 73 + 11) % 100) / 100 * w;
     const sy = ((i * 47 + 29) % 100) / 100 * h;
-    drawStar(ctx, sx, sy, 1 + (i % 3) * 0.5, starBright * (0.2 + Math.sin(t * 4 + i) * 0.15));
+    drawStar(ctx, sx, sy, 1 + (i % 3) * 0.5, starBright * (0.15 + Math.sin(t * 4 + i) * 0.1));
   }
 
   const groundY = h * 0.75;
+  const explodeX = w / 2;
+  const explodeY = h * 0.3;
 
-  // ground shrinks down as we fly up
-  if (t < 0.7) {
-    const gScale = 1 - t;
-    const gY = lerp(groundY, h + 50, t * 1.2);
+  // ===== ASCENDING PHASE =====
+  if (t < 0.5) {
+    const ascendT = t / 0.45;
 
-    // mountains
-    ctx.save();
-    ctx.translate(w / 2, gY);
-    ctx.scale(gScale + 0.3, gScale + 0.3);
-    ctx.translate(-w / 2, 0);
-    drawMountain(ctx, w * 0.1, 0, w * 0.3, h * 0.25, "#2a3a2a");
-    drawMountain(ctx, w * 0.3, 0, w * 0.35, h * 0.32, "#1e2e1e");
-    drawMountain(ctx, w * 0.55, 0, w * 0.3, h * 0.2, "#2a3a2a");
-    drawGround(ctx, w * 2, 0, h * 0.5, "#2a4a2a", "#1a3a1a");
-    drawText(ctx, "MOSFELLSBÆR", w / 2, 30, 14, "#88cc88", 0.5 * gScale);
-
-    // tiny houses
-    for (let i = 0; i < 4; i++) {
-      drawHouse(ctx, w * 0.2 + i * 60, 0, 30, 25, `hsl(${i * 70}, 40%, 40%)`, `hsl(${i * 70}, 25%, 55%)`);
+    // ground shrinking
+    if (ascendT < 1.2) {
+      const gScale = Math.max(0, 1 - ascendT * 0.8);
+      const gY = lerp(groundY, h + 80, ascendT);
+      ctx.save();
+      ctx.translate(w / 2, gY);
+      ctx.scale(gScale + 0.2, gScale + 0.2);
+      ctx.translate(-w / 2, 0);
+      drawMountain(ctx, w * 0.1, 0, w * 0.3, h * 0.25, "#2a3a2a");
+      drawMountain(ctx, w * 0.3, 0, w * 0.35, h * 0.32, "#1e2e1e");
+      drawMountain(ctx, w * 0.55, 0, w * 0.3, h * 0.2, "#2a3a2a");
+      drawGround(ctx, w * 2, 0, h * 0.5, "#2a4a2a", "#1a3a1a");
+      drawText(ctx, "MOSFELLSBÆR", w / 2, 30, 14, "#88cc88", 0.4 * gScale);
+      for (let i = 0; i < 4; i++) {
+        drawHouse(ctx, w * 0.2 + i * 60, 0, 30, 25, `hsl(${i * 70}, 40%, 40%)`, `hsl(${i * 70}, 25%, 55%)`);
+      }
+      ctx.restore();
     }
-    ctx.restore();
-  }
 
-  // rainbow trail from ground up
-  if (t > 0.05) {
-    const trailT = Math.min(1, (t - 0.05) / 0.5);
+    // rainbow trail
+    const trailT = Math.min(1, ascendT);
     const colors = ["#ff4466", "#ff8844", "#ffdd44", "#44dd66", "#4488ff", "#8844ff"];
     colors.forEach((c, i) => {
       ctx.save();
@@ -450,48 +534,150 @@ function renderScene3(ctx: CanvasRenderingContext2D, w: number, h: number, t: nu
       ctx.strokeStyle = c;
       ctx.lineWidth = 8 - i;
       ctx.beginPath();
-      const startY = Math.min(h, lerp(groundY, h + 100, t));
-      const endY = lerp(groundY - 20, h * 0.15, t);
+      const startY = Math.min(h + 20, lerp(groundY, h + 100, ascendT));
+      const endY = lerp(groundY - 20, explodeY, Math.min(1, ascendT));
       ctx.moveTo(w / 2 - 15 + i * 6, startY);
-      ctx.quadraticCurveTo(
-        w / 2 - 30 + i * 10 + Math.sin(t * 5 + i) * 20,
-        (startY + endY) / 2,
-        w / 2 + Math.sin(t * 3) * 10,
-        endY + 50
-      );
+      ctx.quadraticCurveTo(w / 2 - 20 + i * 8 + Math.sin(t * 5 + i) * 15, (startY + endY) / 2, w / 2 + Math.sin(t * 3) * 8, endY + 50);
       ctx.stroke();
       ctx.restore();
     });
+
+    // unicorn + steinar flying up
+    const flyX = w / 2 + Math.sin(t * 8) * 30;
+    const flyY = lerp(groundY - 10, explodeY, Math.min(1, ascendT));
+
+    // pre-explosion shake (last 10% of ascent)
+    let shakeX = 0, shakeY = 0;
+    if (t > 0.40) {
+      const shakeT = (t - 0.40) / 0.10;
+      const intensity = shakeT * 12;
+      shakeX = Math.sin(t * 120) * intensity;
+      shakeY = Math.cos(t * 97) * intensity;
+
+      // growing glow around them
+      ctx.save();
+      ctx.globalAlpha = shakeT * 0.5;
+      const glowR = 30 + shakeT * 50;
+      const glowGrad = ctx.createRadialGradient(flyX + shakeX, flyY + shakeY - 20, 0, flyX + shakeX, flyY + shakeY - 20, glowR);
+      glowGrad.addColorStop(0, "#ffffff");
+      glowGrad.addColorStop(0.3, "#ffd700");
+      glowGrad.addColorStop(0.7, "#ff6600");
+      glowGrad.addColorStop(1, "transparent");
+      ctx.fillStyle = glowGrad;
+      ctx.fillRect(flyX + shakeX - glowR, flyY + shakeY - 20 - glowR, glowR * 2, glowR * 2);
+      ctx.restore();
+    }
+
+    const tilt = Math.sin(t * 6) * 0.1;
+    ctx.save();
+    ctx.translate(flyX + shakeX, flyY + shakeY);
+    ctx.rotate(tilt);
+    ctx.translate(-(flyX + shakeX), -(flyY + shakeY));
+    drawUnicorn(ctx, flyX + shakeX, flyY + shakeY, lerp(1, 0.85, ascendT), t * 20, 1);
+    drawStickman(ctx, flyX + shakeX, flyY + shakeY - 45, lerp(1.2, 1, ascendT), Math.PI * 0.4, "#ffffff");
+    ctx.restore();
+
+    // sparkle orbit
+    const sparkleCount = Math.floor(ascendT * 15);
+    for (let i = 0; i < sparkleCount; i++) {
+      const angle = (i / sparkleCount) * Math.PI * 2 + t * 3;
+      const dist = 40 + Math.sin(t * 5 + i) * 15;
+      drawStar(ctx, flyX + Math.cos(angle) * dist + shakeX, flyY - 20 + Math.sin(angle) * dist * 0.5 + shakeY, 2, 0.4);
+    }
   }
 
-  // unicorn + steinar flying up
-  const flyX = w / 2 + Math.sin(t * 8) * 30;
-  const flyY = lerp(groundY - 10, h * 0.18, Math.min(1, t * 1.3));
-  const tilt = Math.sin(t * 6) * 0.1;
-  ctx.save();
-  ctx.translate(flyX, flyY);
-  ctx.rotate(tilt);
-  ctx.translate(-flyX, -flyY);
-  drawUnicorn(ctx, flyX, flyY, lerp(1, 0.8, t), t * 20, 1);
-  drawStickman(ctx, flyX, flyY - 45, lerp(1.2, 1, t), Math.PI * 0.4, "#ffffff");
-  ctx.restore();
+  // ===== EXPLOSION FLASH =====
+  if (t >= 0.50 && t < 0.58) {
+    const flashT = (t - 0.50) / 0.08;
+    // white flash
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, 1 - flashT * 1.5) * 0.9;
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, w, h);
+    ctx.restore();
 
-  // sparkle burst around them
-  const sparkleCount = Math.floor(t * 20);
-  for (let i = 0; i < sparkleCount; i++) {
-    const angle = (i / sparkleCount) * Math.PI * 2 + t * 3;
-    const dist = 50 + Math.sin(t * 5 + i) * 20;
-    drawStar(ctx, flyX + Math.cos(angle) * dist, flyY - 20 + Math.sin(angle) * dist * 0.5, 2, 0.3 + Math.sin(t * 8 + i) * 0.2);
+    // shockwave
+    drawShockwave(ctx, explodeX, explodeY, flashT);
   }
 
-  // text at the end
-  if (t > 0.8) {
-    const fadeT = (t - 0.8) / 0.2;
-    drawText(ctx, "G O N E", w / 2, h * 0.45, 28 + fadeT * 8, "#ffd700", fadeT * 0.8);
-    drawText(ctx, "into the stars", w / 2, h * 0.52, 14, "#aaaaff", fadeT * 0.5);
+  // ===== FIREWORKS SHOW =====
+  if (t >= 0.50) {
+    const showT = (t - 0.50) / 0.50; // 0→1 over the firework show
+
+    // firework definitions: [delay, x, y, color, seed]
+    const fireworks: [number, number, number, string, number][] = [
+      // first burst — center, the explosion itself
+      [0.00, 0.50, 0.30, "#ffd700", 1.0],
+      [0.00, 0.50, 0.30, "#ff4466", 2.3],
+      // spreading show
+      [0.10, 0.25, 0.25, "#ff4466", 3.1],
+      [0.15, 0.75, 0.20, "#44ddff", 4.7],
+      [0.22, 0.40, 0.15, "#ffdd44", 5.2],
+      [0.28, 0.60, 0.35, "#ff88ff", 6.8],
+      [0.33, 0.20, 0.40, "#44ff88", 7.3],
+      [0.38, 0.80, 0.18, "#ff6644", 8.1],
+      [0.43, 0.50, 0.20, "#88aaff", 9.5],
+      [0.48, 0.35, 0.30, "#ffaa44", 10.2],
+      [0.52, 0.65, 0.25, "#ff44aa", 11.7],
+      [0.56, 0.15, 0.22, "#44ffdd", 12.3],
+      [0.60, 0.85, 0.32, "#ddff44", 13.6],
+      [0.64, 0.50, 0.15, "#ff4444", 14.1],
+      [0.64, 0.50, 0.15, "#ffffff", 14.8],
+      [0.68, 0.30, 0.35, "#aa88ff", 15.2],
+      [0.72, 0.70, 0.22, "#ffdd88", 16.7],
+      // grand finale burst
+      [0.80, 0.50, 0.30, "#ffd700", 17.0],
+      [0.80, 0.35, 0.25, "#ff4466", 17.5],
+      [0.80, 0.65, 0.25, "#44ddff", 18.0],
+      [0.80, 0.50, 0.18, "#ff88ff", 18.5],
+      [0.82, 0.20, 0.30, "#44ff88", 19.0],
+      [0.82, 0.80, 0.30, "#ff6644", 19.5],
+      [0.82, 0.50, 0.40, "#ffdd44", 20.0],
+      [0.85, 0.40, 0.20, "#ffffff", 20.5],
+      [0.85, 0.60, 0.20, "#ffd700", 21.0],
+    ];
+
+    fireworks.forEach(([delay, fx, fy, color, seed]) => {
+      const age = showT - delay;
+      if (age > 0 && age < 0.35) {
+        drawFirework(ctx, fx * w, fy * h, age / 0.35, color, seed);
+      }
+    });
+
+    // falling sparkle dust (accumulates over time)
+    const dustCount = Math.floor(showT * 80);
+    for (let i = 0; i < dustCount; i++) {
+      const seed = i * 137.508;
+      const dx = (Math.sin(seed) * 0.5 + 0.5) * w;
+      const born = (i / 80);
+      const dAge = showT - born;
+      if (dAge > 0 && dAge < 0.5) {
+        const dy = (Math.cos(seed * 0.7) * 0.3 + 0.2) * h + dAge * 200;
+        const da = Math.max(0, 1 - dAge * 3) * 0.4;
+        const colors = ["#ffd700", "#ff4466", "#44ddff", "#ff88ff", "#44ff88"];
+        ctx.save();
+        ctx.globalAlpha = da;
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.beginPath();
+        ctx.arc(dx + Math.sin(dAge * 5 + seed) * 10, dy, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    // text fades in during the show
+    if (showT > 0.3) {
+      const textAlpha = Math.min(1, (showT - 0.3) / 0.3);
+      drawText(ctx, "L E G E N D A R Y", w / 2, h * 0.55, 20 + showT * 10, "#ffd700", textAlpha * 0.7);
+    }
+    if (showT > 0.6) {
+      const textAlpha = Math.min(1, (showT - 0.6) / 0.3);
+      drawText(ctx, "Steinar Freyr Kjartansson", w / 2, h * 0.62, 16, "#ffffff", textAlpha * 0.6);
+      drawText(ctx, "has left the atmosphere", w / 2, h * 0.67, 14, "#aaaaff", textAlpha * 0.4);
+    }
   }
 
-  drawText(ctx, "Chapter III: The Ascension", w / 2, h * 0.92, 16, "#ffdd88", 0.4);
+  drawText(ctx, "Chapter III: The Ascension", w / 2, h * 0.94, 16, "#ffdd88", 0.3);
 }
 
 /* ════════════════════════════════════════════
@@ -642,7 +828,7 @@ export default function Home() {
       {/* Scene 3 */}
       <CanvasScene
         render={renderScene3}
-        scrollHeight="500vh"
+        scrollHeight="700vh"
         title="Chapter III: The Ascension"
         subtitle="What goes up... doesn't always come down"
       />
