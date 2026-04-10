@@ -1,13 +1,41 @@
 @import "tailwindcss";
 
-@keyframes gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+@keyframes ride {
+  0% { transform: translateX(-100vw) translateY(0); }
+  25% { transform: translateX(-30vw) translateY(-30px); }
+  50% { transform: translateX(10vw) translateY(0); }
+  75% { transform: translateX(50vw) translateY(-20px); }
+  100% { transform: translateX(110vw) translateY(0); }
 }
 
-.hero-gradient {
-  background: linear-gradient(135deg, #1e3a5f, #2d5a87, #1e3a5f, #162d4a);
-  background-size: 400% 400%;
-  animation: gradient-shift 12s ease infinite;
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes rainbow-text {
+  0% { color: #ff0000; }
+  16% { color: #ff8800; }
+  33% { color: #ffff00; }
+  50% { color: #00ff00; }
+  66% { color: #0088ff; }
+  83% { color: #8800ff; }
+  100% { color: #ff0000; }
+}
+
+.ride-animation {
+  animation: ride 8s ease-in-out infinite;
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+.rainbow-text {
+  animation: rainbow-text 3s linear infinite;
 }
